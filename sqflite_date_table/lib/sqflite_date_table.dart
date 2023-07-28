@@ -1,5 +1,6 @@
 library sqflite_date_table;
 
+import 'package:handy_extensions/handy_extensions.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqlite_api.dart';
 
@@ -8,6 +9,7 @@ import 'package:sqflite/sqlite_api.dart';
 /// - `db` The database to populate.
 /// - `startDate` The start date of the range to populate. Defaults to 2000-01-01 if `null`.
 /// - `endDate` The end date of the range to populate. Defaults to 2100-12-31 if `null`.
+/// - `createTable` Whether to create the table if it doesn't exist. Defaults to `false`.
 /// - `tableName` The name of the table to populate. Defaults to 'dim_date'.
 ///
 /// This function iterates through each day from `startDate` to `endDate` (inclusive), and for each day it adds a new row to
@@ -26,8 +28,23 @@ void populateDateData(
   Database db, {
   DateTime? startDate,
   DateTime? endDate,
+  bool createTable = false,
   String tableName = 'dim_date',
 }) async {
+  if (createTable) {
+    await db.execute('''CREATE TABLE IF NOT EXISTS `?` (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          `date` TEXT UNIQUE NOT NULL,
+          `year` INTEGER NOT NULL,
+          `month` INTEGER NOT NULL,
+          `day` INTEGER NOT NULL,
+          `day_of_week` INTEGER NOT NULL,
+          `day_of_year` INTEGER NOT NULL,
+          `week_of_year` INTEGER NOT NULL,
+          `is_weekday` INTEGER NOT NULL
+      );''', [tableName]);
+  }
+
   List<Map<String, dynamic>> dateData = [];
 
   // Default start and end dates
@@ -55,7 +72,7 @@ void populateDateData(
 
     // Adds a new row to the dateData list
     dateData.add({
-      'date': startDate.toIso8601String(),
+      'date': startDate.toIso8601DateString(),
       'year': year,
       'month': month,
       'day': day,
