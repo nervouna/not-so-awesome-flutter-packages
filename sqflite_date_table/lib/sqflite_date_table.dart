@@ -31,20 +31,6 @@ void populateDateData(
   bool createTable = false,
   String tableName = 'dim_date',
 }) async {
-  if (createTable) {
-    await db.execute('''CREATE TABLE IF NOT EXISTS `?` (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          `date` TEXT UNIQUE NOT NULL,
-          `year` INTEGER NOT NULL,
-          `month` INTEGER NOT NULL,
-          `day` INTEGER NOT NULL,
-          `day_of_week` INTEGER NOT NULL,
-          `day_of_year` INTEGER NOT NULL,
-          `week_of_year` INTEGER NOT NULL,
-          `is_weekday` INTEGER NOT NULL
-      );''', [tableName]);
-  }
-
   List<Map<String, dynamic>> dateData = [];
 
   // Default start and end dates
@@ -88,6 +74,19 @@ void populateDateData(
 
   // Start writing data to database in a batch
   final batch = db.batch();
+  if (createTable) {
+    await db.execute('''CREATE TABLE IF NOT EXISTS $tableName (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          `date` TEXT UNIQUE NOT NULL,
+          `year` INTEGER NOT NULL,
+          `month` INTEGER NOT NULL,
+          `day` INTEGER NOT NULL,
+          `day_of_week` INTEGER NOT NULL,
+          `day_of_year` INTEGER NOT NULL,
+          `week_of_year` INTEGER NOT NULL,
+          `is_weekday` INTEGER NOT NULL
+      );''');
+  }
 
   // Loop through the dateData list and add each map to the batch
   for (final row in dateData) {
