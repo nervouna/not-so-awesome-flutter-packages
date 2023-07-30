@@ -12,7 +12,7 @@ dependencies:
     path: ../handy_extensions
   flutter:
     sdk: flutter
-  intl: ^0.18.1
+  intl: ^0.18.0
   sqflite: ^2.3.0
 
 dev_dependencies:
