@@ -1,0 +1,20 @@
+name: openai_simple_completion
+description: A simple API wrapper for OpenAI chat completions.
+version: 0.0.1
+publish_to: "none"
+
+environment:
+  sdk: ">=3.0.6 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  dio: ^5.3.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
